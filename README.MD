@@ -1,31 +1,33 @@
 ## Yet another socks proxy using gRPC streaming.
 
-Cloned from elvizlai/grpc-socks to solve some items:
+Cloned from elvizlai/grpc-socks to fix some points:
 
 - Allow insecure gRPC
-- Fix client death if DNS resolver fails
+- Client death when DNS resolver fails
 - Remove local dialing
 - Server now runs in Alpine Linux and Raspberry Pi
+- Use system DNS resolver (including /etc/hosts) if available
+
+## Usage
+
+First: Deploy server.
+
+Launch client:
+
+    ./exec_bin/client-linux -l 127.0.0.1:40000 -r grpcserver:9444 -d
+
+If you are using curl:
+
+    curl -x socks5://127.0.0.1:40000/ https://something.internal
+
+For netcat:
+
+    nc -X 5 -x 127.0.0.1:40000 192.168.451.23 443
+
+Ssh (via nc):
+
+    ssh -o ProxyCommand='nc -X 5 -x 127.0.0.1:40000 %h %p' user@internalserver.local
 
 
 
 
-### Server
-
-Using docker(using bin file if docker is not supported) to start a server.
-
-```Dockerfile
-docker run -itd \
-    -p 10465:10465 \
-    --name grpc-ss \
-    --restart always \
-    sdrzlyz/grpc-ss -l :10465
-```
-
-### Client
-
-```
-client_bin_file -r xxx.xxx.xxx.xxx:10465
-```
-
-#### You can download both server and client bin file from github release.
