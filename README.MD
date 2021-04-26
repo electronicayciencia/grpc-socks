@@ -8,13 +8,20 @@ Cloned from elvizlai/grpc-socks to fix some points:
 - Server now runs in Alpine Linux and Raspberry Pi
 - Use system DNS resolver (including /etc/hosts) if available
 
+## Build
+
+1. make
+1. docker build . -t grpcserver:latest
+
 ## Usage
 
 First: Deploy server.
 
-Launch client:
+And launch client:
 
     ./exec_bin/client-linux -l 127.0.0.1:40000 -r grpcserver:9444 -d
+
+## Common applications
 
 If you are using curl:
 
@@ -28,6 +35,6 @@ Ssh (via nc):
 
     ssh -o ProxyCommand='nc -X 5 -x 127.0.0.1:40000 %h %p' user@internalserver.local
 
-
+Use tsocks for other commands.
 
 
