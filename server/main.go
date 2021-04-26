@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	addr  = ":50051"
+	addr  = ":8080"
 	debug = false
 )
 
@@ -54,7 +54,7 @@ func main() {
 	}
 	defer ln.Close()
 
-	log.Infof("starting proxy server at %q ...", addr)
+	log.Infof("starting gRPC server at %q ...", addr)
 
 	m := cmux.New(ln)
 
@@ -65,7 +65,8 @@ func main() {
 	go httpS.Serve(httpL)
 
 	grpcL := m.Match(cmux.Any())
-	grpcS := grpc.NewServer(grpc.Creds(lib.ServerTLS()), grpc.StreamInterceptor(interceptor))
+	//grpcS := grpc.NewServer(grpc.Creds(lib.ServerTLS()), grpc.StreamInterceptor(interceptor))
+	grpcS := grpc.NewServer(grpc.StreamInterceptor(interceptor))
 	defer grpcS.GracefulStop()
 	pb.RegisterProxyServer(grpcS, &proxy{
 		serverToken: append([]byte(version), append([]byte("@"), []byte(buildAt)...)...),

@@ -1,5 +1,15 @@
 ## Yet another socks proxy using gRPC streaming.
 
+Cloned from elvizlai/grpc-socks to solve some items:
+
+- Allow insecure gRPC
+- Fix client death if DNS resolver fails
+- Remove local dialing
+- Server now runs in Alpine Linux and Raspberry Pi
+
+
+
+
 ### Server
 
 Using docker(using bin file if docker is not supported) to start a server.

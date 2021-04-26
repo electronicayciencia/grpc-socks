@@ -21,9 +21,9 @@ func DialFunc(ctx context.Context, network, addr string) (net.Conn, error) {
 		return nil, err
 	}
 
-	if isLocal(tcpAddr) {
-		return net.DialTCP(network, nil, tcpAddr)
-	}
+	//if isLocal(tcpAddr) {
+	//	return net.DialTCP(network, nil, tcpAddr)
+	//}
 
 	// ctx = metadata.AppendToOutgoingContext(ctx, "url", ctx.Value(nameCtxKey).(string))
 	stream, err := proxyClient.Pump(ctx, callOptions...)
@@ -53,7 +53,7 @@ func (c *client) Read(b []byte) (n int, err error) {
 	}
 
 	return copy(b, p.Data), nil
-}
+  }
 
 func (c *client) Write(b []byte) (n int, err error) {
 	p := &pb.Payload{

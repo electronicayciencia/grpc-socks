@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/resolver"
 
-	"github.com/elvizlai/grpc-socks/lib"
+	//"github.com/elvizlai/grpc-socks/lib"
 	"github.com/elvizlai/grpc-socks/log"
 	"github.com/elvizlai/grpc-socks/pb"
 )
@@ -61,7 +61,8 @@ func (r *etcdResolver) watch(addr string) {
 	//delay test
 	var acm = make(map[string]pb.ProxyClient, 0)
 	for i := range addrList {
-		conn, err := grpc.Dial(addrList[i], grpc.WithTransportCredentials(lib.ClientTLS()))
+		//conn, err := grpc.Dial(addrList[i], grpc.WithTransportCredentials(lib.ClientTLS()))
+		conn, err := grpc.Dial(addrList[i], grpc.WithInsecure())
 		if err != nil {
 			acm[addrList[i]] = nil
 		} else {

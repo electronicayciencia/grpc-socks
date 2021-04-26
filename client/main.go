@@ -45,7 +45,8 @@ func init() {
 func main() {
 	resolver.Register(&etcdResolver{})
 
-	conn, err := grpc.Dial("lb:///"+remoteAddr, grpc.WithBalancerName("round_robin"), grpc.WithTransportCredentials(lib.ClientTLS()))
+	//conn, err := grpc.Dial("lb:///"+remoteAddr, grpc.WithBalancerName("round_robin"), grpc.WithTransportCredentials(lib.ClientTLS()))
+	conn, err := grpc.Dial("lb:///"+remoteAddr, grpc.WithBalancerName("round_robin"), grpc.WithInsecure())
 	if err != nil {
 		panic(err)
 	}
