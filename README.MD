@@ -25,22 +25,41 @@ And launch client:
 
 ## Common applications
 
-If you are using curl:
+### If you are using curl
 
     curl -x socks5://127.0.0.1:40000/ https://something.internal
 
-For netcat (openbsd version):
+### For netcat (openbsd version)
 
     nc -X 5 -x 127.0.0.1:40000 192.168.451.23 443
 
-Ssh (via nc):
+### Ssh (via nc)
 
     ssh -o ProxyCommand='nc -X 5 -x 127.0.0.1:40000 %h %p' user@internalserver.local
 
-In order to tunnel ports:
+Useful options:
+
+	ssh \
+	  -o ProxyCommand='nc -X 5 -x 127.0.0.1:40000 %h %p' \
+	  -o StrictHostKeyChecking=no \
+	  -o UserKnownHostsFile=/dev/null \
+	  user@internalserver.local
+
+### To tunnel remote ports:
 
     mkfifo fifo
     nc -l 636 0<fifo | nc -X 5 -x 127.0.0.1:40000 internalserver.local 636 1>fifo
+
+### Tunnel with other netcats (no socks5 proxy):
+
+Traditional:
+
+    nc -l -p 8001 -c "nc 127.0.0.1 8000"
+
+Busybox:
+
+    nc -v -lk -p 8001 -e /usr/bin/nc 127.0.0.1 8000
+
 
 Use tsocks for other commands.
 
