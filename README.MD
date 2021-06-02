@@ -50,6 +50,10 @@ Useful options:
     mkfifo fifo
     nc -l 636 0<fifo | nc -X 5 -x 127.0.0.1:40000 internalserver.local 636 1>fifo
 
+If `close: Bad file descriptor` try `nc -4`.
+
+## Other ways to tunnel
+
 ### Tunnel with other netcats (no socks5 proxy):
 
 Traditional:
@@ -60,7 +64,34 @@ Busybox:
 
     nc -v -lk -p 8001 -e /usr/bin/nc 127.0.0.1 8000
 
+### tsocks
 
-Use tsocks for other commands.
+### IPtables
+
+Enable NAT:
+
+    iptables -A PREROUTING -t nat -p tcp -i eth0 --dport 80 -j DNAT --to-destination 192.264.1.176:8000
+
+Change the original IP to the intermediate box:
+
+    iptables -A POSTROUTING -t nat -p tcp -d 192.264.1.176 --dport 8000 -j MASQUERADE
+
+Allow packet forwarding:
+
+    iptables -A FORWARD -p tcp -j ACCEPT
+
+Enable kernel forwarding:
+
+    sysctl net.ipv4.conf.eth0.forwarding=1
+
+To delete iptables rules just change `-A` to `-D`.
+
+
+
+
+
+
+
+
 
 
